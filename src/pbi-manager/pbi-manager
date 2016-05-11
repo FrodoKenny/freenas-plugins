@@ -3813,7 +3813,7 @@ mk_path_wrappers() {
 
 	# If this is marked as a linux app, make sure we point to the linux libs first
 	if [ "$linwrap" = "YES" ] ; then
-	  LDCONFIGDIRS="${PROGDIR}/linuxlib"
+	  LDCONFIGDIRS="${PROGDIR}/compat/linux/lib"
 	fi
 
 	# Create the wrapper .ldhints
@@ -6783,13 +6783,14 @@ auto_copy_linuxbase()
 {
 	echo "Checking for Linux libraries to copy..."
 	if [ -d "/compat/linux/usr/lib" ] ; then
-		mkdir ${PBI_PROGDIRPATH}/linuxlib
-		echo "Copying /compat/linux/lib -> ${PBI_PROGDIRPATH}/linuxlib"
+		mkdir -p ${PBI_PROGDIRPATH}/compat/linux/lib
+		echo "Copying /compat/linux/lib -> ${PBI_PROGDIRPATH}/compat/linux/lib"
 		tar cvf - -C /compat/linux/lib . 2>/dev/null | \
-		tar xvf - -C ${PBI_PROGDIRPATH}/linuxlib 2>/dev/null
-		echo "Copying /compat/linux/usr/lib -> ${PBI_PROGDIRPATH}/linuxlib"
+		tar xvf - -C ${PBI_PROGDIRPATH}/compat/linux/lib 2>/dev/null
+		mkdir -p ${PBI_PROGDIRPATH}/compat/linux/usr/lib
+		echo "Copying /compat/linux/usr/lib -> ${PBI_PROGDIRPATH}/compat/linux/usr/lib"
 		tar cvf - -C /compat/linux/usr/lib . 2>/dev/null | \
-		tar xvf - -C ${PBI_PROGDIRPATH}/linuxlib 2>/dev/null
+		tar xvf - -C ${PBI_PROGDIRPATH}/compat/linux/usr/lib 2>/dev/null
 	fi
 }
 
