@@ -4,6 +4,7 @@
 crashplan_pbi_path=/usr/pbi/crashplan-$(uname -m)
 
 /bin/cp ${crashplan_pbi_path}/etc/rc.d/crashplan /usr/local/etc/rc.d/
+ln -s ${crashplan_pbi_path}/bin/bash /bin/bash
 
 ln -sf ${crashplan_pbi_path}/compat /compat
 if [ -d "${crashplan_pbi_path}/share/crashplan/log" ]; then
@@ -18,10 +19,5 @@ else
 	mkdir /var/cache/crashplan
 fi
 ln -sf /var/cache/crashplan ${crashplan_pbi_path}/share/crashplan/cache
-
-#For some reason the default relative RPATH doesnt work in java bin
-${crashplan_pbi_path}/bin/patchelf \
-	--set-rpath ${crashplan_pbi_path}/linux-sun-jre1.7.0/lib/i386/jli \
-	${crashplan_pbi_path}/linux-sun-jre1.7.0/bin/java
 
 ${crashplan_pbi_path}/bin/python2.7 ${crashplan_pbi_path}/crashplanUI/manage.py syncdb --migrate --noinput

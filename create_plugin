@@ -415,6 +415,7 @@ main()
 		plugins_pbidir="${mp}/pbi"
 	fi
 
+	kldload -n linux.ko
 	do_create_plugin "${plugin}"
 }
 
