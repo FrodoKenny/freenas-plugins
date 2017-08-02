@@ -5,6 +5,7 @@ crashplan_pbi_path=/usr/pbi/crashplan-$(uname -m)
 
 /bin/cp ${crashplan_pbi_path}/etc/rc.d/crashplan /usr/local/etc/rc.d/
 ln -s ${crashplan_pbi_path}/bin/bash /bin/bash
+cp /usr/local/lib/libsqlite3.so* ${crashplan_pbi_path}/lib/
 
 ln -sf ${crashplan_pbi_path}/compat /compat
 if [ -d "${crashplan_pbi_path}/share/crashplan/log" ]; then

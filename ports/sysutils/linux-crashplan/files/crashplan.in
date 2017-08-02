@@ -19,12 +19,14 @@ pidfile="/var/run/CrashPlanEngine.pid"
 crashplan_start() {
     /usr/bin/install -d /var/log/crashplan || exit 1
 
+    sed -i '' 's|$TARGETDIR/log|$LOGDIR|g' ${command}
     sed -i '' "s|/bin/ps -eo 'pid,cmd'|/bin/ps -ewwo 'pid,command'|" ${command}
     sed -i '' 's|PIDFILE="$TARGETDIR/${NAME}.pid"|PIDFILE="/var/run/${NAME}.pid"|' ${command}
     ${cp_root}/bin/patchelf --print-rpath ${java_root}/bin/java | grep '$ORIGIN' > /dev/null
     if [ $? -eq 0 ]; then
         ${cp_root}/bin/patchelf --set-rpath ${java_root}/lib/i386/jli ${java_root}/bin/java
     fi
+
     /usr/bin/cpuset -l 0 ${command} start
 }
 
