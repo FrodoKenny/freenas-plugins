@@ -4967,7 +4967,8 @@ start_pbi_prune_ports()
 
 	# Define some commands
      	if [ $PKGNG -eq 1 ] ; then
-		pkgInf="pkg info -f"
+		echo "pkg-$(pkg -v)" >> /.keepports
+		pkgInf="pkg info -a"
      	else
 		pkgInf="pkg_info -I -a"
 	fi
@@ -7396,7 +7397,7 @@ do_port_install()
 
   if [ $PKGNG -eq 1 ] ; then
   	pkgInf="pkg info -e"
-  	pkgDep="pkg info -d"
+	pkgDep="pkg info -d -F"
   	pkgCreate="pkg create -f txz"
   else
   	pkgInf="pkg_info"
@@ -7408,7 +7409,8 @@ do_port_install()
   if [ -e "/pkgs/${pkgName}.${PKGEXT}" ] ; then
      REBUILDPKG="NO"
      echo "Checking package: ${pkgName}"
-     $pkgDep /pkgs/${pkgName}.${PKGEXT} | grep -v -e "^Information" -e "depends on:" -e "^Depends" | sed '/^$/d' | sed 's|Dependency: ||g' > /tmp/deps.$$
+     $pkgDep /pkgs/${pkgName}.${PKGEXT} | grep -v -e "^Information" -e "depends on:" -e "^Depends" | sed '/^$/d' | sed 's|Dependency: ||g' | sed "/^${pkgName}/d" > /tmp/deps.$$
+
      while read dLine
      do
      	$pkgInf $dLine >/dev/null 2>/dev/null

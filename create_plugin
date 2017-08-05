@@ -382,7 +382,13 @@ main()
 	fi
 	if [ -d "${plugins_portsdir}" ]
 	then
-		cp -R ports/* "${plugins_portsdir}"
+		local md5sum=`find -s ports -type f -exec md5 {} \; | md5`
+		if [ ! -e ports.md5 ] || [ $(grep -q "$md5sum" ports.md5) ]
+		then
+			echo $md5sum > ports.md5
+			cp -R ports/* "${plugins_portsdir}"
+			make -C "${plugins_portsdir}" index
+		fi
 	fi
 
 	#
